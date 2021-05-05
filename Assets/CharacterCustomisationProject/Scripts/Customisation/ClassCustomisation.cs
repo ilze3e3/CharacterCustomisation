@@ -1,17 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class ClassCustomisation : MonoBehaviour
 {
     public struct ClassOptions {
-        string className;
-        float hp;
-        float energy;
-        float attack;
-        float defence;
-        float agility;
-        float intelligence;
+        public string className { get; }
+        public float hp { get; }
+        public float energy { get; }
+        public float attack { get; }
+        public float defence { get; }
+        public float agility { get; }
+        public float intelligence { get; }
 
         public ClassOptions(string _name, float _hp, float _energy, float _attack, float _defence, float _agility, float _intelligence)
         {
@@ -27,7 +29,28 @@ public class ClassCustomisation : MonoBehaviour
     }
 
     public GameObject player;
+
+    // Ui interactable Elements
+    public GameObject classPickerPanel;
+    public GameObject prevButtonGObj;
+    public Button prevButton;
+    public GameObject nextButtonGObj;
+    public Button nextButton;
+
+    // Ui Text Elements
+    public TextMeshProUGUI classNameDisplay;
+    public TextMeshProUGUI HealthText;
+    public TextMeshProUGUI EnergyText;
+    public TextMeshProUGUI AttackText;
+    public TextMeshProUGUI DefenceText;
+    public TextMeshProUGUI AgilityText;
+    public TextMeshProUGUI IntelligenceText;
+
+
+
     public List<ClassOptions> classDictionary = new List<ClassOptions>();
+    public bool isClassActive { get; set; } = false;
+    public bool isClassLoaded { get; set; } = false;
 
     public int classCounter = 0;
 
@@ -35,12 +58,22 @@ public class ClassCustomisation : MonoBehaviour
     void Start()
     {
         MakeClass();
-    }
+        prevButton = prevButtonGObj.GetComponent<Button>();
+        nextButton = nextButtonGObj.GetComponent<Button>();
 
+        prevButton.onClick.AddListener(ChooseClassBefore);
+        prevButton.onClick.AddListener(ChooseClassNext);
+    }
+    
     // Update is called once per frame
     void Update()
     {
+        if (isClassLoaded && isClassActive)
+        {
+            // Activate the panel for the Class Customisation
+            classPickerPanel.SetActive(true);
 
+        }
     }
 
     private void MakeClass()
@@ -53,20 +86,45 @@ public class ClassCustomisation : MonoBehaviour
         classDictionary.Add(wizard);
     }
 
-    public void ChooseClassNext()
+    private void ChooseClassNext()
     {
         classCounter++;
-        if(classCounter > classDictionary.Count-1)
-        {
-            classCounter = classDictionary.Count-1; 
-        }
+        CheckButtonInteractable();
+        UpdateTextUI();
     }
-    public void ChooseClassBefore()
+    private void ChooseClassBefore()
     {
         classCounter--;
-        if (classCounter < 0)
+        CheckButtonInteractable();
+        UpdateTextUI();
+    }
+    
+    private void CheckButtonInteractable()
+    {
+        if (classCounter == 0)
         {
-            classCounter = 0;
+            prevButton.interactable = false;
         }
+        if (classCounter == classDictionary.Count-1)
+        {
+            nextButton.interactable = false;
+        }
+        else
+        {
+            prevButton.interactable = true;
+            nextButton.interactable = true;
+        }
+    }
+    
+    private void UpdateTextUI()
+    {
+        classNameDisplay.text = classDictionary[classCounter].className;
+        HealthText.text = classDictionary[classCounter].hp.ToString();
+        EnergyText.text = classDictionary[classCounter].energy.ToString();
+        AttackText.text = classDictionary[classCounter].attack.ToString();
+        DefenceText.text = classDictionary[classCounter].defence.ToString();
+        AgilityText.text = classDictionary[classCounter].agility.ToString();
+        IntelligenceText.text = classDictionary[classCounter].intelligence.ToString();
+
     }
 }
