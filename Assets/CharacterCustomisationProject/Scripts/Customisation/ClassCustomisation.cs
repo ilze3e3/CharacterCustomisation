@@ -36,20 +36,24 @@ public class ClassCustomisation : MonoBehaviour
     public Button prevButton;
     public GameObject nextButtonGObj;
     public Button nextButton;
+    public GameObject confirmButtonGObj;
+    public Button confirmButton;
 
     // Ui Text Elements
     public TextMeshProUGUI classNameDisplay;
-    public TextMeshProUGUI HealthText;
-    public TextMeshProUGUI EnergyText;
-    public TextMeshProUGUI AttackText;
-    public TextMeshProUGUI DefenceText;
-    public TextMeshProUGUI AgilityText;
-    public TextMeshProUGUI IntelligenceText;
+    public TextMeshProUGUI healthText;
+    public TextMeshProUGUI energyText;
+    public TextMeshProUGUI attackText;
+    public TextMeshProUGUI defenceText;
+    public TextMeshProUGUI agilityText;
+    public TextMeshProUGUI intelligenceText;
 
 
-
+    [SerializeField]
     public List<ClassOptions> classDictionary = new List<ClassOptions>();
+    [SerializeField]
     public bool isClassActive { get; set; } = false;
+    [SerializeField]
     public bool isClassLoaded { get; set; } = false;
 
     public int classCounter = 0;
@@ -60,20 +64,14 @@ public class ClassCustomisation : MonoBehaviour
         MakeClass();
         prevButton = prevButtonGObj.GetComponent<Button>();
         nextButton = nextButtonGObj.GetComponent<Button>();
+        confirmButton = confirmButtonGObj.GetComponent<Button>();
 
         prevButton.onClick.AddListener(ChooseClassBefore);
-        prevButton.onClick.AddListener(ChooseClassNext);
-    }
-    
-    // Update is called once per frame
-    void Update()
-    {
-        if (isClassLoaded && isClassActive)
-        {
-            // Activate the panel for the Class Customisation
-            classPickerPanel.SetActive(true);
-
-        }
+        nextButton.onClick.AddListener(ChooseClassNext);
+        confirmButton.onClick.AddListener(ConfirmClass);
+        UpdateTextUI();
+        CheckButtonInteractable();
+        isClassLoaded = true;
     }
 
     private void MakeClass()
@@ -98,6 +96,18 @@ public class ClassCustomisation : MonoBehaviour
         CheckButtonInteractable();
         UpdateTextUI();
     }
+
+    private void ConfirmClass()
+    {
+        player.GetComponent<PlayerController>().SetPlayerClass(classDictionary[classCounter].className,
+                                                               classDictionary[classCounter].hp,
+                                                               classDictionary[classCounter].energy,
+                                                               classDictionary[classCounter].attack,
+                                                               classDictionary[classCounter].defence,
+                                                               classDictionary[classCounter].agility,
+                                                               classDictionary[classCounter].intelligence);
+                                                                                                
+    }
     
     private void CheckButtonInteractable()
     {
@@ -105,7 +115,7 @@ public class ClassCustomisation : MonoBehaviour
         {
             prevButton.interactable = false;
         }
-        if (classCounter == classDictionary.Count-1)
+        else if (classCounter == classDictionary.Count-1)
         {
             nextButton.interactable = false;
         }
@@ -119,12 +129,18 @@ public class ClassCustomisation : MonoBehaviour
     private void UpdateTextUI()
     {
         classNameDisplay.text = classDictionary[classCounter].className;
-        HealthText.text = classDictionary[classCounter].hp.ToString();
-        EnergyText.text = classDictionary[classCounter].energy.ToString();
-        AttackText.text = classDictionary[classCounter].attack.ToString();
-        DefenceText.text = classDictionary[classCounter].defence.ToString();
-        AgilityText.text = classDictionary[classCounter].agility.ToString();
-        IntelligenceText.text = classDictionary[classCounter].intelligence.ToString();
+        healthText.text = "Health: " + classDictionary[classCounter].hp.ToString();
+        energyText.text = "Energy: " + classDictionary[classCounter].energy.ToString();
+        attackText.text = "Attack: " + classDictionary[classCounter].attack.ToString();
+        defenceText.text = "Defence: " + classDictionary[classCounter].defence.ToString();
+        agilityText.text = "Agility: " + classDictionary[classCounter].agility.ToString();
+        intelligenceText.text = "Intelligence: " + classDictionary[classCounter].intelligence.ToString();
 
+    }
+
+    public void Run()
+    {
+        isClassActive = true;
+        classPickerPanel.SetActive(true);
     }
 }
