@@ -34,8 +34,4 @@ public class EquipmentCustomisation : MonoBehaviour
     {
         helmet = helmetOptions[(int)_sliderValue];
     }
-    public void Run()
-    {
-
-    }
 }
