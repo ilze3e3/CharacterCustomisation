@@ -4,9 +4,53 @@ using UnityEngine;
 
 public class CustomisationGet : MonoBehaviour
 {
+    public CharacterStatistics charStats;
 
     public Renderer characterRenderer;
     public GameObject player;
+    [SerializeField]
+    int skinIndex = 0;
+    [SerializeField]
+    int eyesIndex = 0;
+    [SerializeField]
+    int mouthIndex = 0;
+    [SerializeField]
+    int hairIndex = 0;
+    [SerializeField]
+    int clothesIndex = 0;
+    [SerializeField]
+    int armourIndex = 0;
+    [SerializeField]
+    string characterName = "";
+    [SerializeField]
+    int strengthStat = 0;
+    [SerializeField]
+    int dexterityStat = 0;
+    [SerializeField]
+    int constitutionStat = 0;
+    [SerializeField]
+    int wisdomStat = 0;
+    [SerializeField]
+    int intelligenceStat = 0;
+    [SerializeField]
+    int charismaStat = 0;
+
+
+    [SerializeField]
+    int maxHealth = 20;
+    [SerializeField]
+    int currentHealth = 0;
+    [SerializeField]
+    int healthRegen= 0;
+
+    [SerializeField]
+    int maxStamina = 20;
+    [SerializeField]
+    int currentStamina = 0;
+    [SerializeField]
+    int staminaRegen = 0;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -23,13 +67,24 @@ public class CustomisationGet : MonoBehaviour
     }
     void Load()
     {
-        SetTexture("Skins", PlayerPrefs.GetInt("SkinIndex"));
-        SetTexture("Eyes", PlayerPrefs.GetInt("EyesIndex"));
-        SetTexture("Mouth", PlayerPrefs.GetInt("MouthIndex"));
-        SetTexture("Hair", PlayerPrefs.GetInt("HairIndex"));
-        SetTexture("Clothes", PlayerPrefs.GetInt("ClothesIndex"));
-        SetTexture("Armour", PlayerPrefs.GetInt("ArmourIndex"));
-        player.name = PlayerPrefs.GetString("CharacterName");
+        skinIndex = PlayerPrefs.GetInt("SkinIndex");
+        eyesIndex = PlayerPrefs.GetInt("EyesIndex");
+        mouthIndex = PlayerPrefs.GetInt("MouthIndex");
+        hairIndex = PlayerPrefs.GetInt("HairIndex");
+        clothesIndex = PlayerPrefs.GetInt("ClothesIndex");
+        armourIndex = PlayerPrefs.GetInt("ArmourIndex");
+        characterName = PlayerPrefs.GetString("CharacterName");
+
+        SetTexture("Skin", skinIndex);
+        SetTexture("Eyes", eyesIndex);
+        SetTexture("Mouth", mouthIndex);
+        SetTexture("Hair", hairIndex);
+        SetTexture("Clothes", clothesIndex);
+        SetTexture("Armour", armourIndex);
+        player.name = characterName;
+
+        SetStat();
+
     }
     void SetTexture(string type, int index) 
     {
@@ -67,4 +122,19 @@ public class CustomisationGet : MonoBehaviour
         mats[matIndex].mainTexture = texture;
         characterRenderer.materials = mats;
     }
+
+    void SetStat()
+    {
+        strengthStat = PlayerPrefs.GetInt("Strength");
+        dexterityStat = PlayerPrefs.GetInt("Dexterity");
+        constitutionStat = PlayerPrefs.GetInt("Constitution");
+        intelligenceStat = PlayerPrefs.GetInt("Intelligence");
+        wisdomStat = PlayerPrefs.GetInt("Wisdom");
+        charismaStat = PlayerPrefs.GetInt("Charisma");
+
+        charStats.SetCharacterStatistics(characterName, strengthStat, dexterityStat, constitutionStat,
+                                        intelligenceStat, wisdomStat, charismaStat);
+    }
+
+   
 }

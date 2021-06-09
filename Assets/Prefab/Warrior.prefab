@@ -202,6 +202,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1204611726382480239}
+  - component: {fileID: 4428506152246242584}
   m_Layer: 0
   m_Name: Warrior
   m_TagString: Untagged
@@ -225,6 +226,32 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &4428506152246242584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2016613550687805909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6249c3252bd6294f81c2abdb1ed607a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterLevel: 1
+  characterName: 
+  strengthStat: 0
+  dexterityStat: 0
+  constitutionStat: 0
+  wisdomStat: 0
+  intelligenceStat: 0
+  charismaStat: 0
+  maxHealth: 20
+  currentHealth: 0
+  healthRegen: 0
+  maxStamina: 20
+  currentStamina: 0
+  staminaRegen: 0
 --- !u!1 &2067547243402589794
 GameObject:
   m_ObjectHideFlags: 0

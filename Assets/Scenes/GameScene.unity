@@ -387,6 +387,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c71e1d309aca87a42900d7c06570b6dd, type: 3}
+--- !u!114 &687926634 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4428506152246242584, guid: c71e1d309aca87a42900d7c06570b6dd, type: 3}
+  m_PrefabInstance: {fileID: 687926633}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 536727050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6249c3252bd6294f81c2abdb1ed607a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &691532517
 GameObject:
   m_ObjectHideFlags: 0
@@ -512,8 +523,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b749bb68f5138e144ade8199f370c03b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  charStats: {fileID: 687926634}
   characterRenderer: {fileID: 162392437}
   player: {fileID: 536727050}
+  skinIndex: 0
+  eyesIndex: 0
+  mouthIndex: 0
+  hairIndex: 0
+  clothesIndex: 0
+  armourIndex: 0
+  characterName: 
+  strengthStat: 0
+  dexterityStat: 0
+  constitutionStat: 0
+  wisdomStat: 0
+  intelligenceStat: 0
+  charismaStat: 0
+  maxHealth: 20
+  currentHealth: 0
+  healthRegen: 0
+  maxStamina: 20
+  currentStamina: 0
+  staminaRegen: 0
 --- !u!4 &1164640325
 Transform:
   m_ObjectHideFlags: 0
