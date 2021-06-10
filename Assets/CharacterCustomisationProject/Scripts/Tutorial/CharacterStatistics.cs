@@ -1,9 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class CharacterStatistics : MonoBehaviour
 {
+    #region Character Stats
     [SerializeField]
     int characterLevel = 1;
     [SerializeField]
@@ -22,37 +26,53 @@ public class CharacterStatistics : MonoBehaviour
     int charismaStat = 0;
 
     [SerializeField]
-    int maxHealth = 20;
+    float maxHealth = 20;
     [SerializeField]
-    int currentHealth = 0;
+    public float currentHealth = 0;
     [SerializeField]
-    int healthRegen = 0;
+    float healthRegen = 0;
+    [SerializeField]
+    float healthPerLevelUp = 0;
 
     [SerializeField]
-    int maxStamina = 20;
+    float maxStamina = 20;
     [SerializeField]
-    int currentStamina = 0;
+    public float currentStamina = 0;
     [SerializeField]
-    int staminaRegen = 0;
+    float staminaRegen = 0;
     [SerializeField]
-    int runStaminaCost;
+    float staminaPerLevelUp = 0;
 
+    [SerializeField]
+    float runStaminaCost = 15;
+    public bool isPlayerRunning;
+    #endregion
+
+    #region StatHUDComponents
+    [SerializeField]
+    TextMeshProUGUI levelTxt;
+    [SerializeField]
+    Image hpBar;
+    [SerializeField]
+    TextMeshProUGUI hpText;
+    [SerializeField]
+    Image staminaBar;
+    [SerializeField]
+    TextMeshProUGUI staminaText;
+
+    #endregion
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(currentHealth < maxHealth)
+        if (isPlayerRunning)
         {
-            currentHealth += (int)(healthRegen * Time.deltaTime);
-        }
-        if(currentStamina < maxStamina)
-        {
-            currentStamina += (int)(staminaRegen * Time.deltaTime);
+            currentStamina -= runStaminaCost * Time.deltaTime;
         }
     }
 
@@ -73,8 +93,14 @@ public class CharacterStatistics : MonoBehaviour
         healthRegen += GCD(constitutionStat, 5);
         staminaRegen += GCD(strengthStat, 5);
 
+        healthPerLevelUp += GCD(constitutionStat, 5) * 3;
+        
+        staminaPerLevelUp += GCD(strengthStat, 5) * 3;
+
         currentHealth = maxHealth;
         currentStamina = maxStamina;
+
+
     }
 
     private static int GCD(int a, int b)
@@ -94,4 +120,42 @@ public class CharacterStatistics : MonoBehaviour
     {
         currentHealth -= _damage;
     }
+
+    public void LevelUpCharacter()
+    {
+        characterLevel++;
+        maxHealth += healthPerLevelUp;
+        currentHealth += healthPerLevelUp;
+
+        maxStamina += staminaPerLevelUp;
+        currentStamina += staminaPerLevelUp;
+    }
+
+    public void RefreshStat()
+    {
+        Debug.Log("refreshing stat");
+        if (currentHealth < maxHealth)
+        {
+            currentHealth += (healthRegen * Time.deltaTime);
+            if (currentHealth > maxHealth) currentHealth = maxHealth;
+        }
+        if (currentStamina < maxStamina)
+        {
+            Debug.Log("regen stamina");
+            currentStamina += (staminaRegen * Time.deltaTime);
+            if (currentStamina > maxStamina) currentStamina = maxStamina;
+        }
+        RefreshHUD();
+    }
+
+    public void RefreshHUD()
+    {
+        levelTxt.text = "Character Level: " + characterLevel;
+        hpBar.fillAmount = currentHealth / maxHealth;
+        hpText.text = currentHealth.ToString("0.00") + "/" + maxHealth.ToString();
+
+        staminaBar.fillAmount = currentStamina / maxStamina;
+        staminaText.text = currentStamina.ToString("0.00") + "/" + maxStamina.ToString();
+    }
+
 }

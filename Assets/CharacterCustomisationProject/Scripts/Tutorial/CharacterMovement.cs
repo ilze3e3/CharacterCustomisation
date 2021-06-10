@@ -13,13 +13,14 @@ public class CharacterMovement : MonoBehaviour
     public float currSpeed;
     public float gravity = 20.0f;
     public float runSpeedMultiplier = 2.5f;
-    CharacterStatistics charStats;
+    public CharacterStatistics charStats;
 
     // Start is called before the first frame update
     void Start()
     {
         _charC = this.GetComponent<CharacterController>();
         currSpeed = maxSpeed;
+        charStats = this.GetComponentInChildren<CharacterStatistics>();
     }
 
     // Update is called once per frame
@@ -38,12 +39,17 @@ public class CharacterMovement : MonoBehaviour
 
             if(Input.GetKeyDown(KeyCode.LeftShift) && (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0))
             {
-                currSpeed *= runSpeedMultiplier;
+                if (charStats.currentStamina > 0)
+                {
+                    currSpeed *= runSpeedMultiplier;
+                    charStats.isPlayerRunning = true;
+                }
                 
             }
             if(Input.GetKeyUp(KeyCode.LeftShift))
             {
                 if(currSpeed > maxSpeed) currSpeed /= runSpeedMultiplier;
+                charStats.isPlayerRunning = false;
             }
         }
 
@@ -51,5 +57,6 @@ public class CharacterMovement : MonoBehaviour
 
         _charC.Move(moveDir * Time.deltaTime);
 
+        charStats.RefreshStat();
     }
 }

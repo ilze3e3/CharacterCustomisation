@@ -36,21 +36,6 @@ public class CustomisationGet : MonoBehaviour
     int charismaStat = 0;
 
 
-    [SerializeField]
-    int maxHealth = 20;
-    [SerializeField]
-    int currentHealth = 0;
-    [SerializeField]
-    int healthRegen= 0;
-
-    [SerializeField]
-    int maxStamina = 20;
-    [SerializeField]
-    int currentStamina = 0;
-    [SerializeField]
-    int staminaRegen = 0;
-
-
 
     // Start is called before the first frame update
     void Start()
