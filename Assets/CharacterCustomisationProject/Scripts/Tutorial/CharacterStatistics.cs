@@ -34,6 +34,8 @@ public class CharacterStatistics : MonoBehaviour
     int currentStamina = 0;
     [SerializeField]
     int staminaRegen = 0;
+    [SerializeField]
+    int runStaminaCost;
 
     // Start is called before the first frame update
     void Start()
