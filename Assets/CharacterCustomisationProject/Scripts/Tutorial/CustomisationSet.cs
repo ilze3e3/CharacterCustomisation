@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+
 
 public class CustomisationSet : MonoBehaviour
 {
@@ -199,22 +202,67 @@ public class CustomisationSet : MonoBehaviour
     }
     private void SaveCharacter()
     {
-        PlayerPrefs.SetInt("SkinIndex", skinIndex);
-        PlayerPrefs.SetInt("HairIndex", hairIndex);
-        PlayerPrefs.SetInt("EyesIndex", eyesIndex);
-        PlayerPrefs.SetInt("MouthIndex", mouthIndex);
-        PlayerPrefs.SetInt("ClothesIndex", clothesIndex);
-        PlayerPrefs.SetInt("ArmourIndex", armourIndex);
+        GameData gD = new GameData();
 
-        PlayerPrefs.SetString("CharacterName", characterName);
+        gD.skinIndex = skinIndex;
+        gD.hairIndex = hairIndex;
+        gD.eyesIndex = eyesIndex;
+        gD.mouthIndex = mouthIndex;
+        gD.clothesIndex = clothesIndex;
+        gD.armourIndex = armourIndex;
+        gD.characterName = characterName;
+        gD.characterClass = selectedClass[selectedClassIndex];
 
-        for (int i = 0; i < characterStats.Length; i++)
+        foreach(Stats s in characterStats)
         {
-            PlayerPrefs.SetInt(characterStats[i].baseStatsName, characterStats[i].baseStats + 
-                characterStats[i].tempStats);
+            switch(s.baseStatsName)
+            {
+                case "Strength":
+                    gD.strengthStat = s.baseStats + s.tempStats;
+                    break;
+                case "Dexterity":
+                    gD.dexterityStat = s.baseStats + s.tempStats;
+                    break;
+                case "Constitution":
+                    gD.constitutionStat = s.baseStats + s.tempStats;
+                    break;
+                case "Intelligence":
+                    gD.intelligenceStat = s.baseStats + s.tempStats;
+                    break;
+                case "Wisdom":
+                    gD.wisdomStat = s.baseStats + s.tempStats;
+                    break;
+                case "Charisma":
+                    gD.charismaStat = s.baseStats + s.tempStats;
+                    break;
+            }
         }
 
-        PlayerPrefs.SetString("CharacterClass", selectedClass[selectedClassIndex]);
+        string filePath = Application.persistentDataPath + "/save.data";
+
+        FileStream dataStream = new FileStream(filePath, FileMode.Create);
+
+        BinaryFormatter converter = new BinaryFormatter();
+        converter.Serialize(dataStream, gD);
+
+        dataStream.Close();
+
+        //PlayerPrefs.SetInt("SkinIndex", skinIndex);
+        //PlayerPrefs.SetInt("HairIndex", hairIndex);
+        //PlayerPrefs.SetInt("EyesIndex", eyesIndex);
+        //PlayerPrefs.SetInt("MouthIndex", mouthIndex);
+        //PlayerPrefs.SetInt("ClothesIndex", clothesIndex);
+        //PlayerPrefs.SetInt("ArmourIndex", armourIndex);
+
+        //PlayerPrefs.SetString("CharacterName", characterName);
+
+        //for (int i = 0; i < characterStats.Length; i++)
+        //{
+        //    PlayerPrefs.SetInt(characterStats[i].baseStatsName, characterStats[i].baseStats + 
+        //        characterStats[i].tempStats);
+        //}
+
+        //PlayerPrefs.SetString("CharacterClass", selectedClass[selectedClassIndex]);
 
     }
 

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 public class CustomisationGet : MonoBehaviour
 {
@@ -52,13 +54,47 @@ public class CustomisationGet : MonoBehaviour
     }
     void Load()
     {
-        skinIndex = PlayerPrefs.GetInt("SkinIndex");
-        eyesIndex = PlayerPrefs.GetInt("EyesIndex");
-        mouthIndex = PlayerPrefs.GetInt("MouthIndex");
-        hairIndex = PlayerPrefs.GetInt("HairIndex");
-        clothesIndex = PlayerPrefs.GetInt("ClothesIndex");
-        armourIndex = PlayerPrefs.GetInt("ArmourIndex");
-        characterName = PlayerPrefs.GetString("CharacterName");
+        string filePath = Application.persistentDataPath + "/save.data";
+
+        if (File.Exists(filePath))
+        {
+            // File exists  
+            FileStream dataStream = new FileStream(filePath, FileMode.Open);
+
+            BinaryFormatter converter = new BinaryFormatter();
+            GameData gD = converter.Deserialize(dataStream) as GameData;
+
+            dataStream.Close();
+
+            skinIndex = gD.skinIndex;
+            eyesIndex = gD.eyesIndex;
+            mouthIndex = gD.mouthIndex;
+            hairIndex = gD.hairIndex;
+            clothesIndex = gD.clothesIndex;
+            armourIndex = gD.armourIndex;
+            characterName = gD.characterName;
+            strengthStat = gD.strengthStat;
+            dexterityStat = gD.dexterityStat;
+            constitutionStat = gD.constitutionStat;
+            intelligenceStat = gD.intelligenceStat;
+            wisdomStat = gD.wisdomStat;
+            charismaStat = gD.charismaStat;
+        }
+        else
+        {
+            // File does not exist
+            Debug.LogError("File does not exist at: " + filePath);
+        }
+
+
+
+        //skinIndex = PlayerPrefs.GetInt("SkinIndex");
+        //eyesIndex = PlayerPrefs.GetInt("EyesIndex");
+        //mouthIndex = PlayerPrefs.GetInt("MouthIndex");
+        //hairIndex = PlayerPrefs.GetInt("HairIndex");
+        //clothesIndex = PlayerPrefs.GetInt("ClothesIndex");
+        //armourIndex = PlayerPrefs.GetInt("ArmourIndex");
+        //characterName = PlayerPrefs.GetString("CharacterName");
 
         SetTexture("Skin", skinIndex);
         SetTexture("Eyes", eyesIndex);
@@ -110,12 +146,12 @@ public class CustomisationGet : MonoBehaviour
 
     void SetStat()
     {
-        strengthStat = PlayerPrefs.GetInt("Strength");
-        dexterityStat = PlayerPrefs.GetInt("Dexterity");
-        constitutionStat = PlayerPrefs.GetInt("Constitution");
-        intelligenceStat = PlayerPrefs.GetInt("Intelligence");
-        wisdomStat = PlayerPrefs.GetInt("Wisdom");
-        charismaStat = PlayerPrefs.GetInt("Charisma");
+        //strengthStat = PlayerPrefs.GetInt("Strength");
+        //dexterityStat = PlayerPrefs.GetInt("Dexterity");
+        //constitutionStat = PlayerPrefs.GetInt("Constitution");
+        //intelligenceStat = PlayerPrefs.GetInt("Intelligence");
+        //wisdomStat = PlayerPrefs.GetInt("Wisdom");
+        //charismaStat = PlayerPrefs.GetInt("Charisma");
 
         charStats.SetCharacterStatistics(characterName, strengthStat, dexterityStat, constitutionStat,
                                         intelligenceStat, wisdomStat, charismaStat);
