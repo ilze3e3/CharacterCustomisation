@@ -44,6 +44,15 @@ public class CharacterStatistics : MonoBehaviour
     float staminaPerLevelUp = 0;
 
     [SerializeField]
+    float maxMana = 0;
+    [SerializeField]
+    public float currentMana = 0;
+    [SerializeField]
+    float manaRegen = 0;
+    [SerializeField]
+    float manaPerLevelUp = 0;
+
+    [SerializeField]
     float runStaminaCost = 15;
     public bool isPlayerRunning;
     #endregion
@@ -55,11 +64,16 @@ public class CharacterStatistics : MonoBehaviour
     Image hpBar;
     [SerializeField]
     TextMeshProUGUI hpText;
+
     [SerializeField]
     Image staminaBar;
     [SerializeField]
     TextMeshProUGUI staminaText;
 
+    [SerializeField]
+    Image manaBar;
+    [SerializeField]
+    TextMeshProUGUI manaText;
     #endregion
     // Start is called before the first frame update
     void Start()
@@ -89,17 +103,21 @@ public class CharacterStatistics : MonoBehaviour
 
         maxHealth += GCD(constitutionStat, 5) * 5;
         maxStamina += GCD(strengthStat, 5) * 5;
+        maxMana += GCD(intelligenceStat, 2) * 5;
 
         healthRegen += GCD(constitutionStat, 5);
         staminaRegen += GCD(strengthStat, 5);
+        manaRegen += GCD(intelligenceStat, 2);
 
         healthPerLevelUp += GCD(constitutionStat, 5) * 3;
         
         staminaPerLevelUp += GCD(strengthStat, 5) * 3;
 
+        manaPerLevelUp += GCD(intelligenceStat, 2) * 3;
+        
         currentHealth = maxHealth;
         currentStamina = maxStamina;
-
+        currentMana = maxMana;
 
     }
 
@@ -129,6 +147,9 @@ public class CharacterStatistics : MonoBehaviour
 
         maxStamina += staminaPerLevelUp;
         currentStamina += staminaPerLevelUp;
+
+        maxMana += manaPerLevelUp;
+        currentMana += manaPerLevelUp;
     }
 
     public void RefreshStat()
@@ -145,6 +166,11 @@ public class CharacterStatistics : MonoBehaviour
             currentStamina += (staminaRegen * Time.deltaTime);
             if (currentStamina > maxStamina) currentStamina = maxStamina;
         }
+        if(currentMana < maxMana)
+        {
+            currentMana += (manaRegen * Time.deltaTime);
+            if (currentMana > maxMana) currentMana = maxMana;
+        }
         RefreshHUD();
     }
 
@@ -156,6 +182,9 @@ public class CharacterStatistics : MonoBehaviour
 
         staminaBar.fillAmount = currentStamina / maxStamina;
         staminaText.text = currentStamina.ToString("0.00") + "/" + maxStamina.ToString();
+
+        manaBar.fillAmount = currentMana / maxMana;
+        manaText.text = currentMana.ToString("0.00") + "/" + maxMana.ToString();
     }
 
 }

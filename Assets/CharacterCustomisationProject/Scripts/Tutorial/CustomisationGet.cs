@@ -46,12 +46,9 @@ public class CustomisationGet : MonoBehaviour
         Load();
         player.AddComponent<CharacterController>();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    /// <summary>
+    /// Load the binary save and set the textures and stats according to the save data
+    /// </summary>
     void Load()
     {
         string filePath = Application.persistentDataPath + "/save.data";

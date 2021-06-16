@@ -51,7 +51,12 @@ public class CustomisationSet : MonoBehaviour
 
     [Header("Material Name")]
     public string[] matName = new string[6];
+    
 
+    /// <summary>
+    /// Define all the different possible materials. 
+    /// then for each material, grab all associated textures from the resources folder then store them to the corresponding list
+    /// </summary>
     private void Start()
     {
         matName = new string[6] { "Skin", "Eyes", "Mouth", "Hair", "Clothes", "Armour" };
@@ -91,6 +96,11 @@ public class CustomisationSet : MonoBehaviour
 
        
     }
+    /// <summary>
+    /// Set the texture to the material
+    /// </summary>
+    /// <param name="type"> type of material </param>
+    /// <param name="dir"> the index of the texture </param>
     private void SetTexture(string type, int dir)
         {
             int index = 0, max = 0, matIndex = 0;
@@ -165,7 +175,10 @@ public class CustomisationSet : MonoBehaviour
                     break;
             }
         }
-
+    /// <summary>
+    /// Choose from one of the predefined classes
+    /// </summary>
+    /// <param name="_classIndex"> index of class chosen </param>
     private void ChooseClass(int _classIndex)
     {
         switch (_classIndex)
@@ -200,6 +213,9 @@ public class CustomisationSet : MonoBehaviour
                 break;
         }
     }
+    /// <summary>
+    /// Save Character data and stats to a binary save
+    /// </summary>
     private void SaveCharacter()
     {
         GameData gD = new GameData();
