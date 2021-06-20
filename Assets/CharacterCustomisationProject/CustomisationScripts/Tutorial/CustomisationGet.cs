@@ -10,6 +10,9 @@ public class CustomisationGet : MonoBehaviour
 
     public Renderer characterRenderer;
     public GameObject player;
+
+    [SerializeField]
+    Vector3 playerPosition;
     [SerializeField]
     int skinIndex = 0;
     [SerializeField]
@@ -36,6 +39,8 @@ public class CustomisationGet : MonoBehaviour
     int intelligenceStat = 0;
     [SerializeField]
     int charismaStat = 0;
+    [SerializeField]
+    string characterClass = "";
 
 
 
@@ -62,6 +67,9 @@ public class CustomisationGet : MonoBehaviour
             GameData gD = converter.Deserialize(dataStream) as GameData;
 
             dataStream.Close();
+            if (gD.characterPositionX != null ||
+                gD.characterPositionY != null ||
+                gD.characterPositionZ != null) playerPosition = new Vector3((float)gD.characterPositionX, (float)gD.characterPositionY, (float)gD.characterPositionZ);
 
             skinIndex = gD.skinIndex;
             eyesIndex = gD.eyesIndex;
@@ -103,6 +111,8 @@ public class CustomisationGet : MonoBehaviour
 
         SetStat();
 
+        if (playerPosition != null) player.transform.position = playerPosition;
+
     }
     void SetTexture(string type, int index) 
     {
@@ -139,6 +149,13 @@ public class CustomisationGet : MonoBehaviour
         Material[] mats = characterRenderer.materials;
         mats[matIndex].mainTexture = texture;
         characterRenderer.materials = mats;
+
+        CharacterStatistics charStats = player.GetComponent<CharacterStatistics>();
+        charStats.skinIndex = skinIndex;
+        charStats.eyesIndex = eyesIndex;
+        charStats.mouthIndex = mouthIndex;
+        charStats.armourIndex = armourIndex;
+        charStats.clothesIndex = clothesIndex;
     }
 
     void SetStat()
@@ -150,9 +167,7 @@ public class CustomisationGet : MonoBehaviour
         //wisdomStat = PlayerPrefs.GetInt("Wisdom");
         //charismaStat = PlayerPrefs.GetInt("Charisma");
 
-        charStats.SetCharacterStatistics(characterName, strengthStat, dexterityStat, constitutionStat,
+        charStats.SetCharacterStatistics(characterName, characterClass,strengthStat, dexterityStat, constitutionStat,
                                         intelligenceStat, wisdomStat, charismaStat);
     }
-
-   
 }

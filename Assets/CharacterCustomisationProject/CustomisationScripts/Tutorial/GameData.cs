@@ -10,6 +10,10 @@ public class GameData
 
     public string characterClass = "";
 
+    public float? characterPositionX;
+    public float? characterPositionY;
+    public float? characterPositionZ;
+
     public int skinIndex = 0;
      
     public int eyesIndex = 0;
@@ -33,6 +37,24 @@ public class GameData
     public int intelligenceStat = 0;
      
     public int charismaStat = 0;
+
+    public float maxHealth = 0;
+    public float currentHealth = 0;
+    public float healthRegen = 0;
+    public float healthPerLevelUp = 0;
+
+    public float maxStamina = 0;
+    public float currentStamina = 0;
+    public float staminaRegen = 0;
+    public float staminaPerLevelUp = 0;
+
+    public float maxMana = 0;
+    public float currentMana = 0;
+    public float manaRegen = 0;
+    public float manaPerLevelUp = 0;
+
+    public float runStaminaCost = 0;
+  
 
     public GameData()
     {

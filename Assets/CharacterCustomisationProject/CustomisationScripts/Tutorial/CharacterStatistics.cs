@@ -9,53 +9,58 @@ public class CharacterStatistics : MonoBehaviour
 {
     #region Character Stats
     [SerializeField]
-    int characterLevel = 1;
+    public int characterLevel = 1;
     [SerializeField]
-    string characterName = "";
+    public string characterName = "";
     [SerializeField]
-    int strengthStat = 0;
+    public string characterClass = "";
     [SerializeField]
-    int dexterityStat = 0;
+    public int strengthStat = 0;
     [SerializeField]
-    int constitutionStat = 0;
+    public int dexterityStat = 0;
     [SerializeField]
-    int wisdomStat = 0;
+    public int constitutionStat = 0;
     [SerializeField]
-    int intelligenceStat = 0;
+    public int wisdomStat = 0;
     [SerializeField]
-    int charismaStat = 0;
+    public int intelligenceStat = 0;
+    [SerializeField]
+    public int charismaStat = 0;
 
     [SerializeField]
-    float maxHealth = 20;
+    public float maxHealth = 20;
     [SerializeField]
     public float currentHealth = 0;
     [SerializeField]
-    float healthRegen = 0;
+    public float healthRegen = 0;
     [SerializeField]
-    float healthPerLevelUp = 0;
+    public float healthPerLevelUp = 0;
 
     [SerializeField]
-    float maxStamina = 20;
+    public float maxStamina = 20;
     [SerializeField]
     public float currentStamina = 0;
     [SerializeField]
-    float staminaRegen = 0;
+    public float staminaRegen = 0;
     [SerializeField]
-    float staminaPerLevelUp = 0;
+    public float staminaPerLevelUp = 0;
 
     [SerializeField]
-    float maxMana = 0;
+    public float maxMana = 0;
     [SerializeField]
     public float currentMana = 0;
     [SerializeField]
-    float manaRegen = 0;
+    public float manaRegen = 0;
     [SerializeField]
-    float manaPerLevelUp = 0;
+    public float manaPerLevelUp = 0;
 
     [SerializeField]
-    float runStaminaCost = 15;
+    public float runStaminaCost = 15;
     public bool isPlayerRunning;
     #endregion
+
+    public int skinIndex;
+    public int eyesIndex, mouthIndex, hairIndex, armourIndex, clothesIndex;
 
     #region StatHUDComponents
     [SerializeField]
@@ -90,10 +95,10 @@ public class CharacterStatistics : MonoBehaviour
         }
     }
 
-    public void SetCharacterStatistics(string _name, int _str, int _dex, int _con, int _wis, int _int, int _chr)
+    public void SetCharacterStatistics(string _name, string _className, int _str, int _dex, int _con, int _wis, int _int, int _chr)
     {
         characterName = _name;
-
+        characterClass = _className;
         strengthStat = _str;
         dexterityStat = _dex;
         constitutionStat = _con;

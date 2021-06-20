@@ -376,7 +376,9 @@ public class CustomisationSet : MonoBehaviour
         if(GUI.Button(new Rect(left, 8 * y, 5 * x, y), "Save and Play"))
         {
             SaveCharacter();
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(2);
+            PlayerPrefs.SetString("LoadTo", "PlayGame");
+            PlayerPrefs.SetString("LoadFrom", "CustomisationScene");
         }
     }
 }

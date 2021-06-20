@@ -7,17 +7,19 @@ public class MainMenuScript : MonoBehaviour
 {
     public void CreateNewGame()
     {
-        SceneManager.LoadSceneAsync(2);
         PlayerPrefs.SetString("LoadTo", "NewGame");
+        SceneManager.LoadSceneAsync(2);
     }
     public void LoadGame()
     {
-        SceneManager.LoadSceneAsync(2);
         PlayerPrefs.SetString("LoadTo", "LoadGame");
+        SceneManager.LoadSceneAsync(2);
     }
     public void GoToOptions()
     {
-        SceneManager.LoadSceneAsync(1);
+        PlayerPrefs.SetString("LoadTo", "Options");
+        PlayerPrefs.SetString("LoadFrom", "MainMenu");
+        SceneManager.LoadSceneAsync(2);
     }
     public void QuitGame()
     {
