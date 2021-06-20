@@ -73,7 +73,7 @@ public class InGameMenuHandler : MonoBehaviour
         {
             pauseMenu.SetActive(true);
             pauseMenuCanvasGroup = pauseMenu.GetComponent<CanvasGroup>();
-            StartCoroutine("FadeIn");
+            StartCoroutine("PauseFadeIn");
             pauseMenuStatus = true;
             if(pauseMenuCanvasGroup.alpha >= 1) Time.timeScale = 0;
         }
@@ -82,7 +82,7 @@ public class InGameMenuHandler : MonoBehaviour
         {
             pauseMenuCanvasGroup = pauseMenu.GetComponent<CanvasGroup>();
             Time.timeScale = 1;
-            StartCoroutine("FadeOut");
+            StartCoroutine("PauseFadeOut");
             if(pauseMenuCanvasGroup.alpha <= 0) pauseMenu.SetActive(false);
             pauseMenuStatus = false;
         }
