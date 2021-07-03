@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 647cefb3d2cba3c49bb546e5910c9c3c, type: 3}
+  m_Name: GatherAnAppleQuest
+  m_EditorClassIdentifier: 
+  questName: Gather an Apple
+  completed: 1
+  questDescription: 'NPC needs an Apple. Get it before he rage quits. (Hint: See
+    that drop apple button to the right, press it)'
+  itemToGather: {fileID: 11400000, guid: 704f17f9c8b695548883baca8a4fdf31, type: 2}
+  quantity: 1
+  reward: {fileID: 11400000, guid: 704f17f9c8b695548883baca8a4fdf31, type: 2}
+  questCompleteEvent:
+    m_PersistentCalls:
+      m_Calls: []

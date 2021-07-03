@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c11032c7f4bd1ff4d837de61c65fca65, type: 3}
+  m_Name: NPC_1
+  m_EditorClassIdentifier: 
+  availableQuest:
+  - {fileID: 11400000, guid: 44d1a648c32649349a95c987662ce1c2, type: 2}
+  currentApprovalRating: 50
+  neutralDialogueList:
+  - {fileID: 11400000, guid: 307f96c852f40b24d82445e111a8b06d, type: 2}
+  - {fileID: 11400000, guid: 2a35c548500acab4291ac0a98e570631, type: 2}
+  likeDialogueList:
+  - {fileID: 11400000, guid: ef6c485937a218e42bea6eb29bbc0046, type: 2}
+  - {fileID: 11400000, guid: 7f7065f2fca413e41a03485a1e8c27d5, type: 2}
+  dislikeDialogueList:
+  - {fileID: 11400000, guid: 6b52edca332a9c743950cb42bf1c33c0, type: 2}
+  - {fileID: 11400000, guid: a8683604916f24b43aa4c13ec2bbcab0, type: 2}
+  minLikeRating: 70
+  minDislikeRating: 30
+  insultRatingCost: -5
+  complimentRatingCost: 5
+  greetingResponse: {fileID: 11400000, guid: 72aca2d877f3a2c46a30026869446e01, type: 2}
+  complimentResponse: {fileID: 11400000, guid: 9a493445ca6d6154a95ecab88b462877, type: 2}
+  insultResponse: {fileID: 11400000, guid: 118b6cb9da1b74a4e831d3de711d9c1e, type: 2}

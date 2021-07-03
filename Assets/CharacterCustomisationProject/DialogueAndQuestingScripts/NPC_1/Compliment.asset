@@ -9,11 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49590c3289d830744a4de68506a86bbe, type: 3}
-  m_Name: New Equipment
+  m_Script: {fileID: 11500000, guid: 1749513048b339e47aa77a98ba44d0e7, type: 3}
+  m_Name: Compliment
   m_EditorClassIdentifier: 
-  itemName: 
-  description: 
-  category: 
-  isEquippable: 0
-  prefab: {fileID: 0}
+  sentence: Thanks, I do like the compliment.

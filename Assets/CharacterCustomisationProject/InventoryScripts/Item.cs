@@ -9,6 +9,8 @@ public class Item : ScriptableObject
     public string category;
     public bool isEquippable;
     public Sprite itemImage;
+    public bool isStackable;
+    public int maxNumberPerStack;
 
     // Start is called before the first frame update
     void Start()

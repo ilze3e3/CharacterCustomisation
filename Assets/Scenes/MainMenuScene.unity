@@ -1165,8 +1165,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -670.46924, y: -130.26471}
-  m_SizeDelta: {x: 449.7682, y: 339.4135}
+  m_AnchoredPosition: {x: -640.4518, y: -94.688446}
+  m_SizeDelta: {x: 509.8031, y: 410.566}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &712969895
 MonoBehaviour:
@@ -1190,7 +1190,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 24
+    m_FontSize: 32
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -1201,13 +1201,10 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'For Menu Systems assignment, Background Music only plays in game which
-    is past the customisation scene. To get there, either press play and create a
-    character or Continue if a game has been saved before.
-
-
-    Sound effects only
-    plays on button presses in game which are situated on the HUD. '
+  m_Text: For Inventory and Questing, when approaching an npc or an item, picking
+    up or talking to an npc might be janky since I'm using a sphere collider and
+    the capsule collider on the player and the sphere collider on the npc and item
+    are not colliding right.
 --- !u!222 &712969896
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1744,7 +1741,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -678, y: -410}
+  m_AnchoredPosition: {x: -678, y: -346}
   m_SizeDelta: {x: 470.4664, y: 138.601}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1493322449
@@ -1771,7 +1768,12 @@ MonoBehaviour:
 
     - Customisation
 
-    - Menu Systems'
+    - Menu Systems
+
+    -
+    Inventory
+
+    - Questing and Dialogue'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

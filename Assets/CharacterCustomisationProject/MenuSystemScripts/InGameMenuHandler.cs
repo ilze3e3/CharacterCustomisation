@@ -16,10 +16,11 @@ public class InGameMenuHandler : MonoBehaviour
     [SerializeField]bool pauseMenuStatus = false;
     [SerializeField] CanvasGroup HUDCanvasGroup;
     [SerializeField] bool isHUDOn = true;
+    [SerializeField] GameObject instructionPanel;
     
     IEnumerator PauseFadeOut()
     {
-        while (pauseMenuCanvasGroup.alpha > 0)
+        while (pauseMenuCanvasGroup.alpha > 0.1)
         {
             pauseMenuCanvasGroup.alpha -= 0.9f * Time.deltaTime;
             yield return null;
@@ -83,7 +84,7 @@ public class InGameMenuHandler : MonoBehaviour
             pauseMenuCanvasGroup = pauseMenu.GetComponent<CanvasGroup>();
             Time.timeScale = 1;
             StartCoroutine("PauseFadeOut");
-            if(pauseMenuCanvasGroup.alpha <= 0) pauseMenu.SetActive(false);
+            pauseMenu.SetActive(false);
             pauseMenuStatus = false;
         }
     }
@@ -175,6 +176,18 @@ public class InGameMenuHandler : MonoBehaviour
         {
             StartCoroutine("HUDFadeIn");
             isHUDOn = true;
+        }
+    }
+
+    public void ShowHideInstruction()
+    {
+       if(instructionPanel.activeSelf)
+        {
+            instructionPanel.SetActive(false);
+        }
+       else
+        {
+            instructionPanel.SetActive(true);
         }
     }
 }

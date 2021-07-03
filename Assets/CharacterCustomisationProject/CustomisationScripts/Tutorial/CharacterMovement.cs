@@ -8,14 +8,32 @@ public class CharacterMovement : MonoBehaviour
 
     public Vector3 moveDir = Vector3.zero;
 
+    public float turnSmoothTime = 0.2f;
+    private float turnSmoothVelocity;
+
+    public float speedSmoothTime = 0.1f;
+    private float speedSmoothVelocity;
+    private float currentSpeed;
+    private float gravity = -20;
+    private Transform cameraT;
+
     private float horizontal = 0;
     private float vertical = 0;
     public float jumpSpeed = 8.0f;
     public float maxSpeed = 6.0f;
     public float currSpeed;
-    public float gravity = 20.0f;
     public float runSpeedMultiplier = 2.5f;
     public CharacterStatistics charStats;
+
+    public List<GameObject> itemInRangeList = new List<GameObject>();
+
+    public InventoryComponent inventory;
+    public GameObject inventoryPanel;
+
+    public QuestHandler questHandler;
+    public GameObject questPanel;
+
+    public GameObject pickupTooltip;
 
     KeyCode moveForward;
     KeyCode moveLeft;
@@ -42,6 +60,10 @@ public class CharacterMovement : MonoBehaviour
         Debug.Log("LeftKey: " + moveLeft.ToString());
         Debug.Log("RightKey: " + moveRight.ToString());
 
+        inventory = this.GetComponent<InventoryComponent>();
+
+        cameraT = Camera.main.transform;
+
     }
 
     // Update is called once per frame
@@ -49,7 +71,7 @@ public class CharacterMovement : MonoBehaviour
     {
         if(Input.GetKeyDown(moveForward))
         {
-            vertical = -1.0f;
+            vertical = 1.0f;
         }
         if(Input.GetKeyUp(moveForward))
         {
@@ -57,7 +79,7 @@ public class CharacterMovement : MonoBehaviour
         }
         if(Input.GetKeyDown(moveLeft))
         {
-            horizontal = 1.0f;
+            horizontal = -1.0f;
         }
         if(Input.GetKeyUp(moveLeft))
         {
@@ -65,7 +87,7 @@ public class CharacterMovement : MonoBehaviour
         }
         if(Input.GetKeyDown(moveRight))
         {
-            horizontal = -1.0f;
+            horizontal = 1.0f;
         }
         if(Input.GetKeyUp(moveRight))
         {
@@ -73,17 +95,57 @@ public class CharacterMovement : MonoBehaviour
         }
         if(Input.GetKeyDown(moveBackward))
         {
-            vertical = 1.0f;
+            vertical = -1.0f;
         }
         if(Input.GetKeyUp(moveBackward))
         {
             vertical = 0;
         }
         
+        if(Input.GetKeyDown(KeyCode.I))
+        {
+            if(inventoryPanel.activeSelf)
+            {
+                inventoryPanel.SetActive(false);
+                inventory.EmptyDisplay();
+            }
+            else
+            {
+                inventoryPanel.SetActive(true);
+                inventory.DisplayAllItem();
+            }
+        }
+
+        if(Input.GetKeyDown(KeyCode.Q))
+        {
+            if (questPanel.activeSelf)
+            {
+                questPanel.SetActive(false);
+                questHandler.ResetQuestDisplay();
+            }
+            else
+            {
+                questPanel.SetActive(true);
+                questHandler.DisplayActiveQuest();
+            }
+        }
+
         PlayerPrefs.SetString("LoadFrom", "GameScene");
         
+        if(itemInRangeList.Count > 0)
+        {
+            if(Input.GetKeyDown(KeyCode.E))
+            {
+                //Pickup Item
+                GameObject itemToPickUp = itemInRangeList[0];
+                inventory.PickUpItem(itemToPickUp);
+                itemInRangeList.RemoveAt(0);
+                pickupTooltip.SetActive(false);
+            }
+        }
 
-        if(_charC.isGrounded)
+
+        if (_charC.isGrounded)
         {
             moveDir = new Vector3(horizontal, 0, vertical);
             moveDir = transform.TransformDirection(moveDir);
@@ -94,26 +156,48 @@ public class CharacterMovement : MonoBehaviour
                 moveDir.y = jumpSpeed;
             }
 
-            if(Input.GetKeyDown(KeyCode.LeftShift) && (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0))
+            if (Input.GetKeyDown(KeyCode.LeftShift) && (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0))
             {
                 if (charStats.currentStamina > 0)
                 {
                     currSpeed *= runSpeedMultiplier;
                     charStats.isPlayerRunning = true;
                 }
-                
+
             }
-            if(Input.GetKeyUp(KeyCode.LeftShift))
+            if (Input.GetKeyUp(KeyCode.LeftShift))
             {
-                if(currSpeed > maxSpeed) currSpeed /= runSpeedMultiplier;
+                if (currSpeed > maxSpeed) currSpeed /= runSpeedMultiplier;
                 charStats.isPlayerRunning = false;
             }
-        }
 
-        moveDir.y -= gravity * Time.deltaTime;
+        }
+        moveDir.y = -1;
+        
+        if (moveDir != Vector3.zero)
+        {
+            this.transform.rotation = Quaternion.Euler(0, cameraT.eulerAngles.y, 0);
+        }
 
         _charC.Move(moveDir * Time.deltaTime);
 
         charStats.RefreshStat();
+    }
+    
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.layer == 6)
+        {
+            itemInRangeList.Add(collision.gameObject);
+            pickupTooltip.SetActive(true);
+        }
+    }
+    private void OnCollisionExit(Collision collision)
+    {
+        if(collision.gameObject.layer == 6)
+        {
+            itemInRangeList.Remove(collision.gameObject);
+            pickupTooltip.SetActive(false);
+        }
     }
 }

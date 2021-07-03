@@ -49,7 +49,7 @@ public class CustomisationGet : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
         Load();
-        player.AddComponent<CharacterController>();
+        //player.AddComponent<CharacterController>();
     }
     /// <summary>
     /// Load the binary save and set the textures and stats according to the save data
