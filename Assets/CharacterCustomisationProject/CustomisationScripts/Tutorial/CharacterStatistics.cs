@@ -61,7 +61,14 @@ public class CharacterStatistics : MonoBehaviour
 
     public int skinIndex;
     public int eyesIndex, mouthIndex, hairIndex, armourIndex, clothesIndex;
-
+    bool isDead = false;
+    [SerializeField] Vector3 spawnPoint;
+    [SerializeField] AudioSource deathSFX;
+    [SerializeField] AudioSource respawnSFX;
+    [SerializeField] AudioSource bgMusic;
+    bool playedOnce = false;
+    bool bgMusicPlayedOnce = false;
+    
     #region StatHUDComponents
     [SerializeField]
     TextMeshProUGUI levelTxt;
@@ -79,19 +86,40 @@ public class CharacterStatistics : MonoBehaviour
     Image manaBar;
     [SerializeField]
     TextMeshProUGUI manaText;
-    #endregion
-    // Start is called before the first frame update
-    void Start()
-    {
 
+    [SerializeField] GameObject deathPanel;
+    [SerializeField] GameObject crosshair;
+
+    #endregion
+    private void Start()
+    {
+        
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        if(bgMusic != null && !bgMusicPlayedOnce)
+        {
+            bgMusic.Play();
+            bgMusicPlayedOnce = true;
+        }
         if (isPlayerRunning)
         {
             currentStamina -= runStaminaCost * Time.deltaTime;
+        }
+        if (deathPanel != null && currentHealth <= 0)
+        {
+            isDead = true;
+            deathPanel.SetActive(true);
+            crosshair.SetActive(false);
+            if (!playedOnce)
+            {
+                playedOnce = true;
+                deathSFX.Play();
+                bgMusic.Stop();
+            }
         }
     }
 
@@ -115,14 +143,16 @@ public class CharacterStatistics : MonoBehaviour
         manaRegen += GCD(intelligenceStat, 2);
 
         healthPerLevelUp += GCD(constitutionStat, 5) * 3;
-        
+
         staminaPerLevelUp += GCD(strengthStat, 5) * 3;
 
         manaPerLevelUp += GCD(intelligenceStat, 2) * 3;
-        
+
         currentHealth = maxHealth;
         currentStamina = maxStamina;
         currentMana = maxMana;
+
+       
 
     }
 
@@ -160,21 +190,24 @@ public class CharacterStatistics : MonoBehaviour
     public void RefreshStat()
     {
         Debug.Log("refreshing stat");
-        if (currentHealth < maxHealth)
+        if (!isDead)
         {
-            currentHealth += (healthRegen * Time.deltaTime);
-            if (currentHealth > maxHealth) currentHealth = maxHealth;
-        }
-        if (currentStamina < maxStamina)
-        {
-            Debug.Log("regen stamina");
-            currentStamina += (staminaRegen * Time.deltaTime);
-            if (currentStamina > maxStamina) currentStamina = maxStamina;
-        }
-        if(currentMana < maxMana)
-        {
-            currentMana += (manaRegen * Time.deltaTime);
-            if (currentMana > maxMana) currentMana = maxMana;
+            if (currentHealth < maxHealth)
+            {
+                currentHealth += (healthRegen * Time.deltaTime);
+                if (currentHealth > maxHealth) currentHealth = maxHealth;
+            }
+            if (currentStamina < maxStamina)
+            {
+                Debug.Log("regen stamina");
+                currentStamina += (staminaRegen * Time.deltaTime);
+                if (currentStamina > maxStamina) currentStamina = maxStamina;
+            }
+            if (currentMana < maxMana)
+            {
+                currentMana += (manaRegen * Time.deltaTime);
+                if (currentMana > maxMana) currentMana = maxMana;
+            }
         }
         RefreshHUD();
     }
@@ -192,4 +225,16 @@ public class CharacterStatistics : MonoBehaviour
         manaText.text = currentMana.ToString("0.00") + "/" + maxMana.ToString();
     }
 
+    public void Respawn()
+    {
+        this.GetComponentInParent<Transform>().position = spawnPoint;
+        currentHealth = maxHealth;
+        currentStamina = maxStamina;
+        currentMana = maxMana;
+        isDead = false;
+        crosshair.SetActive(true);
+        respawnSFX.Play();
+        playedOnce = false;
+        bgMusic.Play();
+    }
 }

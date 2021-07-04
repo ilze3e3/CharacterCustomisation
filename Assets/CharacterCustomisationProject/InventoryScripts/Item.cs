@@ -11,16 +11,4 @@ public class Item : ScriptableObject
     public Sprite itemImage;
     public bool isStackable;
     public int maxNumberPerStack;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

@@ -5,19 +5,29 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using TMPro;
 
 public class InGameMenuHandler : MonoBehaviour
 {
     CharacterStatistics playerStats; 
     [SerializeField] GameObject pauseMenu;
+    [SerializeField] CanvasGroup charStatsPanel;
+    [SerializeField] bool isStatOn = false;
     [SerializeField] GameObject pressAnyKeyPanel;
-    [SerializeField] AudioSource bgMusic;
     CanvasGroup pauseMenuCanvasGroup;
-    [SerializeField]bool pauseMenuStatus = false;
+    [SerializeField] bool pauseMenuStatus = false;
     [SerializeField] CanvasGroup HUDCanvasGroup;
     [SerializeField] bool isHUDOn = true;
     [SerializeField] GameObject instructionPanel;
-    
+
+    [SerializeField] TextMeshProUGUI strengthText;
+    [SerializeField] TextMeshProUGUI dexterityText;
+    [SerializeField] TextMeshProUGUI constitutionText;
+    [SerializeField] TextMeshProUGUI intelligenceText;
+    [SerializeField] TextMeshProUGUI wisdomText;
+    [SerializeField] TextMeshProUGUI charismaText;
+
+    [SerializeField] CharacterStatistics charStats;
     IEnumerator PauseFadeOut()
     {
         while (pauseMenuCanvasGroup.alpha > 0.1)
@@ -66,8 +76,6 @@ public class InGameMenuHandler : MonoBehaviour
         if(pressAnyKeyPanel.activeSelf && Input.anyKeyDown)
         {
             pressAnyKeyPanel.SetActive(false);
-            bgMusic.Play();
-
         }
         
         if(Input.GetKeyDown(KeyCode.Escape) && !pauseMenuStatus)
@@ -176,6 +184,24 @@ public class InGameMenuHandler : MonoBehaviour
         {
             StartCoroutine("HUDFadeIn");
             isHUDOn = true;
+        }
+    }
+
+    public void ShowHideStat()
+    {
+       if(charStatsPanel.gameObject.activeSelf)
+        {
+            charStatsPanel.gameObject.SetActive(false);
+        }
+       else
+        {
+            charStatsPanel.gameObject.SetActive(true);
+            strengthText.text = "Strength: " + charStats.strengthStat;
+            dexterityText.text = "Dexterity: " + charStats.dexterityStat;
+            constitutionText.text = "Dexterity: " + charStats.constitutionStat;
+            intelligenceText.text = "Intelligence: " + charStats.intelligenceStat;
+            wisdomText.text = "Wisdom: " + charStats.wisdomStat;
+            charismaText.text = "Charisma: " + charStats.charismaStat;
         }
     }
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 [RequireComponent(typeof(CharacterController))]
 public class CharacterMovement : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class CharacterMovement : MonoBehaviour
     public float speedSmoothTime = 0.1f;
     private float speedSmoothVelocity;
     private float currentSpeed;
-    private float gravity = -20;
+    
     private Transform cameraT;
 
     private float horizontal = 0;
@@ -23,6 +24,7 @@ public class CharacterMovement : MonoBehaviour
     public float maxSpeed = 6.0f;
     public float currSpeed;
     public float runSpeedMultiplier = 2.5f;
+    public float crouchSpeedDivider = 2.5f;
     public CharacterStatistics charStats;
 
     public List<GameObject> itemInRangeList = new List<GameObject>();
@@ -34,11 +36,25 @@ public class CharacterMovement : MonoBehaviour
     public GameObject questPanel;
 
     public GameObject pickupTooltip;
+    public CanvasGroup damageIndicator;
+
+    [SerializeField] AudioSource bgMusic;
+
+    [SerializeField] Animator charAnimator;
 
     KeyCode moveForward;
     KeyCode moveLeft;
     KeyCode moveRight;
     KeyCode moveBackward;
+
+    IEnumerator FlashDamage()
+    {
+        while(damageIndicator.alpha > 0)
+        {
+            damageIndicator.alpha -= Time.deltaTime;
+            yield return null;
+        }
+    }
 
     public HotkeyRebinder hotkey;
     // Start is called before the first frame update
@@ -63,6 +79,7 @@ public class CharacterMovement : MonoBehaviour
         inventory = this.GetComponent<InventoryComponent>();
 
         cameraT = Camera.main.transform;
+        
 
     }
 
@@ -72,34 +89,49 @@ public class CharacterMovement : MonoBehaviour
         if(Input.GetKeyDown(moveForward))
         {
             vertical = 1.0f;
+            charAnimator.SetFloat("vertical", vertical);
+ 
         }
         if(Input.GetKeyUp(moveForward))
         {
             vertical = 0;
+            charAnimator.SetFloat("vertical", vertical);
+
         }
         if(Input.GetKeyDown(moveLeft))
         {
             horizontal = -1.0f;
+            charAnimator.SetFloat("horizontal", horizontal);
+      
         }
         if(Input.GetKeyUp(moveLeft))
         {
             horizontal = 0;
+            charAnimator.SetFloat("horizontal", horizontal);
+     
         }
         if(Input.GetKeyDown(moveRight))
         {
             horizontal = 1.0f;
+            charAnimator.SetFloat("horizontal", horizontal);
+        
         }
         if(Input.GetKeyUp(moveRight))
         {
             horizontal = 0;
+            charAnimator.SetFloat("horizontal", horizontal);
+         
         }
         if(Input.GetKeyDown(moveBackward))
         {
             vertical = -1.0f;
+            charAnimator.SetFloat("vertical", vertical);
+    
         }
         if(Input.GetKeyUp(moveBackward))
         {
             vertical = 0;
+            charAnimator.SetFloat("vertical", vertical);
         }
         
         if(Input.GetKeyDown(KeyCode.I))
@@ -147,6 +179,7 @@ public class CharacterMovement : MonoBehaviour
 
         if (_charC.isGrounded)
         {
+           
             moveDir = new Vector3(horizontal, 0, vertical);
             moveDir = transform.TransformDirection(moveDir);
             moveDir *= currSpeed;
@@ -165,11 +198,20 @@ public class CharacterMovement : MonoBehaviour
                 }
 
             }
+            if(Input.GetKeyDown(KeyCode.LeftControl) && (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0))
+            {
+                currSpeed /= crouchSpeedDivider;
+            }
+            if(Input.GetKeyUp(KeyCode.LeftControl))
+            {
+                currSpeed *= crouchSpeedDivider;
+            }
             if (Input.GetKeyUp(KeyCode.LeftShift))
             {
                 if (currSpeed > maxSpeed) currSpeed /= runSpeedMultiplier;
                 charStats.isPlayerRunning = false;
             }
+            
 
         }
         moveDir.y = -1;
@@ -182,6 +224,11 @@ public class CharacterMovement : MonoBehaviour
         _charC.Move(moveDir * Time.deltaTime);
 
         charStats.RefreshStat();
+
+        if(damageIndicator.alpha < 0.2f)
+        {
+            damageIndicator.gameObject.SetActive(false);
+        }
     }
     
     private void OnCollisionEnter(Collision collision)
@@ -190,6 +237,15 @@ public class CharacterMovement : MonoBehaviour
         {
             itemInRangeList.Add(collision.gameObject);
             pickupTooltip.SetActive(true);
+        }
+
+        if (collision.gameObject.tag.Contains("Enemy"))
+        {
+            damageIndicator.gameObject.SetActive(true);
+            // Make damage indicator appear
+            charStats.TakeDamage(10);
+            damageIndicator.alpha = 1;
+            StartCoroutine(FlashDamage());
         }
     }
     private void OnCollisionExit(Collision collision)
