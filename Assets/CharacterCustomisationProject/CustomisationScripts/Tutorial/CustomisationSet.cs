@@ -4,6 +4,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using UnityEngine.UI;
+using TMPro;
 
 
 public class CustomisationSet : MonoBehaviour
@@ -51,17 +53,23 @@ public class CustomisationSet : MonoBehaviour
 
     [Header("Material Name")]
     public string[] matName = new string[6];
-    
 
-    /// <summary>
-    /// Define all the different possible materials. 
-    /// then for each material, grab all associated textures from the resources folder then store them to the corresponding list
-    /// </summary>
-    private void Start()
+    [SerializeField] GameObject leftRightPrefab;
+    [SerializeField] GameObject headingPrefab;
+    [SerializeField] GameObject customisationPanelParent;
+    [SerializeField] TextMeshProUGUI pointText;
+    [SerializeField] TextMeshProUGUI strText;
+    [SerializeField] TextMeshProUGUI dexText;
+    [SerializeField] TextMeshProUGUI conText;
+    [SerializeField] TextMeshProUGUI intText;
+    [SerializeField] TextMeshProUGUI wisText;
+    [SerializeField] TextMeshProUGUI chrText;
+
+    private void Awake()
     {
         matName = new string[6] { "Skin", "Eyes", "Mouth", "Hair", "Clothes", "Armour" };
         selectedClass = new string[] { "Barbarian", "Bard", "Druid" };
-        
+
         for (int i = 0; i < skinMax; i++)
         {
             Texture2D tempTexture = Resources.Load("Character/Skin_" + i) as Texture2D;
@@ -93,16 +101,37 @@ public class CustomisationSet : MonoBehaviour
             armour.Add(tempTexture);
         }
 
-
-       
     }
+
+    /// <summary>
+    /// Define all the different possible materials. 
+    /// then for each material, grab all associated textures from the resources folder then store them to the corresponding list
+    /// </summary>
+    private void Start()
+    {
+        pointText.text = "Points: " + statPoints.ToString();
+        RefreshText();
+    }
+    
+    public void SetTextureNext(string type)
+    {
+        SetTexture(type, 1);
+    }
+    public void SetTexturePrev(string type)
+    {
+        SetTexture(type, -1);
+    }
+
+    
+
     /// <summary>
     /// Set the texture to the material
     /// </summary>
     /// <param name="type"> type of material </param>
     /// <param name="dir"> the index of the texture </param>
-    private void SetTexture(string type, int dir)
+    public void SetTexture(string type, int dir)
         {
+        Debug.Log("In Settexture");
             int index = 0, max = 0, matIndex = 0;
             Texture2D[] textures = new Texture2D[0];
 
@@ -179,7 +208,7 @@ public class CustomisationSet : MonoBehaviour
     /// Choose from one of the predefined classes
     /// </summary>
     /// <param name="_classIndex"> index of class chosen </param>
-    private void ChooseClass(int _classIndex)
+    public void ChooseClass(int _classIndex)
     {
         switch (_classIndex)
         {
@@ -212,11 +241,36 @@ public class CustomisationSet : MonoBehaviour
                 characterStats[5].baseStats = 8;
                 break;
         }
+
+        RefreshText();
     }
+
+    public void IncreaseStat(int i)
+    {
+        if(statPoints > 0)
+        {
+            statPoints--;
+            pointText.text = "Points: " + statPoints;
+            characterStats[i].tempStats++;
+        }
+        RefreshText();
+    }
+    public void ReduceStat(int i)
+    {
+        if(characterStats[i].tempStats > 0)
+        {
+            statPoints++;
+            pointText.text = "Points: " + statPoints;
+            characterStats[i].tempStats--;
+        }
+        RefreshText();
+    }
+
     /// <summary>
     /// Save Character data and stats to a binary save
     /// </summary>
-    private void SaveCharacter()
+    /// 
+    public void SaveCharacter()
     {
         GameData gD = new GameData();
 
@@ -263,6 +317,10 @@ public class CustomisationSet : MonoBehaviour
 
         dataStream.Close();
 
+        SceneManager.LoadScene(2);
+        PlayerPrefs.SetString("LoadTo", "PlayGame");
+        PlayerPrefs.SetString("LoadFrom", "CustomisationScene");
+
         //PlayerPrefs.SetInt("SkinIndex", skinIndex);
         //PlayerPrefs.SetInt("HairIndex", hairIndex);
         //PlayerPrefs.SetInt("EyesIndex", eyesIndex);
@@ -282,6 +340,20 @@ public class CustomisationSet : MonoBehaviour
 
     }
 
+    private void RefreshText()
+    {
+        strText.text = "Strength: " + (characterStats[0].baseStats + characterStats[0].tempStats).ToString();
+        dexText.text = "Dexterity: " + (characterStats[1].baseStats + characterStats[1].tempStats).ToString();
+        conText.text = "Constitution: " + (characterStats[2].baseStats + characterStats[2].tempStats).ToString();
+        wisText.text = "Wisdom: " + (characterStats[3].baseStats + characterStats[3].tempStats).ToString();
+        intText.text = "Intelligence: " + (characterStats[4].baseStats + characterStats[4].tempStats).ToString();
+        chrText.text = "Charisma: " + (characterStats[5].baseStats+ characterStats[5].tempStats).ToString();
+    }
+
+    public void SetName(string name)
+    {
+        characterName = name;
+    }
     private void OnGUI()
     {
         #region GUI value setup
@@ -298,6 +370,7 @@ public class CustomisationSet : MonoBehaviour
         float label = 1.5f * scr.x;
         #endregion
         #region Customisation Textures
+        /*
         for (int i = 0; i < matName.Length; i++)
         {
             if (GUI.Button(new Rect(left, y + i * y, x, y), "<"))
@@ -311,8 +384,10 @@ public class CustomisationSet : MonoBehaviour
                 SetTexture(matName[i], 1);
             }
         }
+        */
         #endregion
         #region Choose Class
+        /*
         float classX = 12.75f * scr.x;
         float h = 0;
         if (GUI.Button(new Rect(classX, y + h * y, 4 * x, y),classButton)) 
@@ -343,8 +418,10 @@ public class CustomisationSet : MonoBehaviour
 
             GUI.EndScrollView();
         }
+        */ 
         #endregion
         #region Set Stats
+        /*
         GUI.Box(new Rect(classX, 5*y, 4*x, y), "Points: " + statPoints);
         for(int i = 0; i < characterStats.Length; i++)
         {
@@ -369,9 +446,9 @@ public class CustomisationSet : MonoBehaviour
                 }
             }
         }
-
+        */
         #endregion
-
+        /*
         characterName = GUI.TextField(new Rect(left, 7 * y, 5 * x, y), characterName, 32);
         if(GUI.Button(new Rect(left, 8 * y, 5 * x, y), "Save and Play"))
         {
@@ -380,6 +457,7 @@ public class CustomisationSet : MonoBehaviour
             PlayerPrefs.SetString("LoadTo", "PlayGame");
             PlayerPrefs.SetString("LoadFrom", "CustomisationScene");
         }
+        */
     }
 }
 
